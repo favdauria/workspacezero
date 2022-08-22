@@ -37,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function(e){
         if (resultObj.status === "ok")
         {
             carsList = resultObj.data;
-            alert(carsList.products);
             showCarsList(carsList.products);
         }
     });
