@@ -30,7 +30,7 @@ function pwdCheck(){
 document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("subButton").addEventListener("click", function() {
         if(emailCheck() && pwdCheck()){
-            window.location.href("index2.html")
+            window.location.href = "index2.html"
         }else{
             emailCheck();
             pwdCheck();
