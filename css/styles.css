@@ -188,3 +188,9 @@ a.custom-card:hover {
 .checked {
   color: orange;
 }
+/* 
+#priceFilter{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+} */
