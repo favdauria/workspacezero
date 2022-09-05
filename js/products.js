@@ -1,6 +1,18 @@
 let productsList = [];
 let filteredProducts = [];
 
+
+function user(){
+    let userLi = document.createElement("li");
+    let userA = document.createElement("a");
+    let userName = document.createTextNode(localStorage.getItem('user'));
+    userLi.className = 'nav-item';
+    userA.className = 'nav-link active';
+    userLi.appendChild(userA);
+    userA.appendChild(userName);
+    document.getElementById('navbarNav').getElementsByTagName('ul')[0].appendChild(userLi);
+}
+
 //función que recibe un array con los datos, y los muestra en pantalla a través el uso del DOM
 function showProductsList(array){
     let htmlContentToAppend = "";
@@ -29,18 +41,6 @@ function showProductsList(array){
         `  
     }
     document.getElementById("cat-list-container").innerHTML = htmlContentToAppend; 
-}
-
-
-function user(){
-    let userLi = document.createElement("li");
-    let userA = document.createElement("a");
-    let userName = document.createTextNode(localStorage.getItem('user'));
-    userLi.className = 'nav-item';
-    userA.className = 'nav-link active';
-    userLi.appendChild(userA);
-    userA.appendChild(userName);
-    document.getElementById('navbarNav').getElementsByTagName('ul')[0].appendChild(userLi);
 }
 
 document.addEventListener("DOMContentLoaded", function(e){
