@@ -62,7 +62,6 @@ document.addEventListener("DOMContentLoaded", function(e){
 document.getElementById('priceFilter').addEventListener('click', function(){
     let minPriceFilter = document.getElementById('minPrice').value;
     let maxPriceFilter = document.getElementById('maxPrice').value;
-    let productsFilter;
 
     let productPrices = [];
     for (product of productsList){
@@ -77,14 +76,8 @@ document.getElementById('priceFilter').addEventListener('click', function(){
     if(maxPriceFilter == ''){
         maxPriceFilter = maxPriceProd
     }
-    
-    if(filteredProducts.length == 0){
-        productsFilter = productsList;
-    }else{
-        productsFilter = filteredProducts;
-    }
 
-    filteredProducts = productsFilter.filter(product => product.cost >= minPriceFilter && product.cost <= maxPriceFilter);
+    filteredProducts = productsList.filter(product => product.cost >= minPriceFilter && product.cost <= maxPriceFilter);
     showProductsList(filteredProducts);
 
 })
