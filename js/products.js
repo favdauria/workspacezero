@@ -19,9 +19,8 @@ function showProductsList(array){
 
     for(let i = 0; i < array.length; i++){ 
         let product = array[i];
-        console.log('hi')
         htmlContentToAppend += `
-        <div class="list-group-item list-group-item-action">
+        <div id=`+product.id+` class="list-group-item list-group-item-action">
             <div class="row">
                 <div class="col-3">
                     <img src="` + product.image + `" alt="product image" class="img-thumbnail">
@@ -41,71 +40,16 @@ function showProductsList(array){
         `  
     }
     document.getElementById("cat-list-container").innerHTML = htmlContentToAppend; 
+
+    //#### PRODUCT INFO CLICK####
+    let products = document.getElementsByClassName('list-group-item list-group-item-action');
+    for(product of products){
+        product.addEventListener('click', function(){
+            localStorage.setItem("prodID", this.id);
+            window.location = "product-info.html"
+        })
+    }
 }
-
-document.getElementById('priceFilter').addEventListener('click', function(){
-    let minPriceFilter = document.getElementById('minPrice').value;
-    let maxPriceFilter = document.getElementById('maxPrice').value;
-
-    let productPrices = [];
-    for (product of productsList){
-        productPrices.push(product.cost)
-    }
-    let minPriceProd = Math.min(...productPrices);
-    let maxPriceProd = Math.max(...productPrices);
-
-    if(minPriceFilter == ''){
-        minPriceFilter = minPriceProd
-    }
-    if(maxPriceFilter == ''){
-        maxPriceFilter = maxPriceProd
-    }
-
-    filteredProducts = productsList.filter(product => product.cost >= minPriceFilter && product.cost <= maxPriceFilter);
-    showProductsList(filteredProducts);
-
-})
-
-document.getElementById('clearFilter').addEventListener('click', function(){
-    document.getElementById('minPrice').value = ''
-    document.getElementById('maxPrice').value = ''
-    filteredProducts = [];
-    showProductsList(productsList);
-})
-
-document.getElementById('sortAsc').addEventListener('click', function(){
-    let productsAsc;
-    if(filteredProducts.length == 0){
-        productsAsc = productsList;
-    }else{
-        productsAsc = filteredProducts;
-    }
-
-    productsAsc.sort((a,b)=>a.cost-b.cost)
-    showProductsList(productsAsc);
-})
-
-document.getElementById('sortDesc').addEventListener('click', function(){
-    let productsDesc;
-    if(filteredProducts.length == 0){
-        productsDesc = productsList;
-    }else{
-        productsDesc = filteredProducts;
-    }
-    productsDesc.sort((a,b)=>b.cost-a.cost)
-    showProductsList(productsDesc);
-})
-
-document.getElementById('sortRev').addEventListener('click', function(){
-    let productsRev;
-    if(filteredProducts.length == 0){
-        productsRev = productsList;
-    }else{
-        productsRev = filteredProducts;
-    }
-    productsRev.sort((a,b)=>b.soldCount-a.soldCount)
-    showProductsList(productsRev);
-})
 
 document.addEventListener("DOMContentLoaded", function(e){
     user();
@@ -120,4 +64,76 @@ document.addEventListener("DOMContentLoaded", function(e){
             showProductsList(productsList);
         }
     });
+
+
+    //#### FILTER SORT ####
+    document.getElementById('clearFilter').addEventListener('click', function(){
+        document.getElementById('minPrice').value = ''
+        document.getElementById('maxPrice').value = ''
+        filteredProducts = [];
+        showProductsList(productsList);
+    })
+    //#### FILTER ####
+    
+
+    //#### SORT ####
+    document.getElementById('sortAsc').addEventListener('click', function(){
+        let productsAsc;
+        if(filteredProducts.length == 0){
+            productsAsc = productsList;
+        }else{
+            productsAsc = filteredProducts;
+        }
+    
+        productsAsc.sort((a,b)=>a.cost-b.cost)
+        showProductsList(productsAsc);
+    })
+    document.getElementById('sortDesc').addEventListener('click', function(){
+        let productsDesc;
+        if(filteredProducts.length == 0){
+            productsDesc = productsList;
+        }else{
+            productsDesc = filteredProducts;
+        }
+        productsDesc.sort((a,b)=>b.cost-a.cost)
+        showProductsList(productsDesc);
+    })
+    
+    document.getElementById('sortRev').addEventListener('click', function(){
+        let productsRev;
+        if(filteredProducts.length == 0){
+            productsRev = productsList;
+        }else{
+            productsRev = filteredProducts;
+        }
+        productsRev.sort((a,b)=>b.soldCount-a.soldCount)
+        showProductsList(productsRev);
+    })
+
+    document.getElementById('priceFilter').addEventListener('click', function(){
+        let minPriceFilter = document.getElementById('minPrice').value;
+        let maxPriceFilter = document.getElementById('maxPrice').value;
+    
+        let productPrices = [];
+        for (product of productsList){
+            productPrices.push(product.cost)
+        }
+        let minPriceProd = Math.min(...productPrices);
+        let maxPriceProd = Math.max(...productPrices);
+    
+        if(minPriceFilter == ''){
+            minPriceFilter = minPriceProd
+        }
+        if(maxPriceFilter == ''){
+            maxPriceFilter = maxPriceProd
+        }
+    
+        filteredProducts = productsList.filter(product => product.cost >= minPriceFilter && product.cost <= maxPriceFilter);
+        showProductsList(filteredProducts);    
+    })
+    //#### SORT ####
+
+
+    
+
 });
