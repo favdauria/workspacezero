@@ -43,22 +43,6 @@ function showProductsList(array){
     document.getElementById("cat-list-container").innerHTML = htmlContentToAppend; 
 }
 
-document.addEventListener("DOMContentLoaded", function(e){
-    user()
-
-    categoryID = localStorage.getItem('catID');
-    let CATEGORY_URL = PRODUCTS_URL +  categoryID + '.json';
-    console.log(CATEGORY_URL)
-    getJSONData(CATEGORY_URL).then(function(resultObj){
-        if (resultObj.status === "ok")
-        {
-            let data = resultObj.data;
-            productsList = data.products;
-            showProductsList(productsList);
-        }
-    });
-});
-
 document.getElementById('priceFilter').addEventListener('click', function(){
     let minPriceFilter = document.getElementById('minPrice').value;
     let maxPriceFilter = document.getElementById('maxPrice').value;
@@ -122,3 +106,18 @@ document.getElementById('sortRev').addEventListener('click', function(){
     productsRev.sort((a,b)=>b.soldCount-a.soldCount)
     showProductsList(productsRev);
 })
+
+document.addEventListener("DOMContentLoaded", function(e){
+    user();
+
+    let categoryID = localStorage.getItem('catID');
+    let CATEGORY_URL = PRODUCTS_URL +  categoryID + '.json';
+    getJSONData(CATEGORY_URL).then(function(resultObj){
+        if (resultObj.status === "ok")
+        {
+            let data = resultObj.data;
+            productsList = data.products;
+            showProductsList(productsList);
+        }
+    });
+});
