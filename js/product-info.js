@@ -1,13 +1,40 @@
 let productID
 let PRODUCT_INFO
+let PRODUCT_INFO_DATA
 let PRODUCT_COMMENT
+
+
+function comprarProducto(product){
+    let prodDataToCart = {
+        id: PRODUCT_INFO_DATA.id,
+        name: PRODUCT_INFO_DATA.name,
+        count: 1,
+        unitCost: PRODUCT_INFO_DATA.cost,
+        currency: PRODUCT_INFO_DATA.currency,
+        image: PRODUCT_INFO_DATA.images[0]
+    }
+
+    let listaProdCompraArray = JSON.parse(localStorage.getItem('listaProductosCompra'));
+    listaProdCompraArray.push(prodDataToCart);
+    localStorage.setItem('listaProductosCompra', JSON.stringify(listaProdCompraArray));
+    
+}
+
 
 function showProductInfo(product){
 
     let htmlContentToAppend = `
-        <div class = "text-left p4">
         <br>
-            <h2>`+product.name+`</h2>
+        <br>
+        <div class="row">
+        <br>
+            <div class="col">
+                <h2>`+product.name+`</h2>
+            </div>
+            <div class="col-1">
+                <span class = "col-12"><button type="button" class="btn btn-success" onclick="comprarProducto()">Comprar</button></span>
+            </div>
+            
         </div>
         <hr/>
         <p class='fw-bold'>Precio:</p>
@@ -111,6 +138,7 @@ function addCommentForm(){
         <br>
         <button type="button" class="btn btn-primary" id="commentSend">Enviar</button>
     </div>
+    <hr/> 
     `)
     
     document.getElementById("commentSend").addEventListener('click',function(){
@@ -129,7 +157,7 @@ function addCommentForm(){
         let newDateText = newDate.getFullYear()+'-'+newDate.getMonth()+'-'+newDate.getDate()+' '+newDate.getHours()+':'+newDate.getMinutes()+':'+newDate.getSeconds();
 
         document.getElementById('productComments').insertAdjacentHTML('beforeend', `
-        <div >
+        <div>
             <p>
             <span class= "fw-bold">`+newName+`</span>`+` - `+newDateText + ` - ` + starsComment(newRating) + `
             </p>
@@ -139,21 +167,62 @@ function addCommentForm(){
     `)
     })
 
-}
 
-
-document.addEventListener("DOMContentLoaded", function(e){
-    productID = localStorage.getItem('prodID');
-    PRODUCT_INFO = PRODUCT_INFO_URL+productID+'.json';
-    PRODUCT_COMMENT = PRODUCT_INFO_COMMENTS_URL+productID+'.json';
-
-    
     getJSONData(PRODUCT_INFO).then(function(resultObj){
         if (resultObj.status === "ok")
         {
             let data = resultObj.data;
-            showProductInfo(data);
+            addRelatedProducts(data.relatedProducts);
         }
     });
+
+}
+
+function addRelatedProducts(products){
+
+    let relatedProdHTML = '';
+
+    for (product of products){
+        relatedProdHTML += `
+            <div class="col-lg-4 col-md-4 col-xs-4 thumb">
+                <a id=`+product.id+` class="thumbnail" href="#" onclick="redirectProduct(this.id)">
+                    <img class="img-fluid" src=`+product.image  +`>
+                </a>
+                <p class="text-center">`+product.name+`</p>
+            </div>`
+        }
+
+        document.getElementsByTagName('main')[0].insertAdjacentHTML('beforeend', `
+        <br>
+        <p>Productos relacionados</p>
+        <div class="row">`+relatedProdHTML+`</div>
+        `)
+
+}
+
+function redirectProduct(relatedProdID){
+    localStorage.setItem("prodID", relatedProdID);
+    location.reload();
+}
+
+document.addEventListener("DOMContentLoaded", function(e){
+    user();
+    productID = localStorage.getItem('prodID');
+    PRODUCT_INFO = PRODUCT_INFO_URL+productID+'.json';
+    PRODUCT_COMMENT = PRODUCT_INFO_COMMENTS_URL+productID+'.json';
+    
+    if(localStorage.getItem('listaProductosCompra') == null){
+        localStorage.setItem('listaProductosCompra', '[]')
+    }
+    
+    getJSONData(PRODUCT_INFO).then(function(resultObj){
+        if (resultObj.status === "ok")
+        {
+            PRODUCT_INFO_DATA = resultObj.data;
+            showProductInfo(PRODUCT_INFO_DATA);
+        }
+    });
+    
+    
 
 })
