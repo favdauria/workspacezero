@@ -211,10 +211,6 @@ document.addEventListener("DOMContentLoaded", function(e){
     PRODUCT_INFO = PRODUCT_INFO_URL+productID+'.json';
     PRODUCT_COMMENT = PRODUCT_INFO_COMMENTS_URL+productID+'.json';
     
-    if(localStorage.getItem('listaProductosCompra') == null){
-        localStorage.setItem('listaProductosCompra', '[]')
-    }
-    
     getJSONData(PRODUCT_INFO).then(function(resultObj){
         if (resultObj.status === "ok")
         {

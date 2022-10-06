@@ -52,6 +52,7 @@ let getJSONData = function(url){
 }
 
 let loadCartProducts = function(purchaseData){
+  
   let productsHTMLtoAppend = '';
   let purchaseProductsLocalStorage = JSON.parse(localStorage.getItem('listaProductosCompra'));
   let totalProductsPurchase = purchaseData.articles.concat(purchaseProductsLocalStorage);
